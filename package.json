@@ -1,0 +1,34 @@
+{
+  "name": "amq",
+  "version": "0.3.5",
+  "description": "A  nodejs AMQP implementation built on top of amqplib's channel-oriented api. Connection/Queue/Exchange constructors supporting auto-reconnection and backoff.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/objectundefined/amq.git"
+  },
+  "keywords": [
+    "amqp",
+    "amq",
+    "queue",
+    "rabbitmq",
+    "amqplib"
+  ],
+	"dependencies" : {
+    "underscore": "~1.5.2",
+    "ready": "git://github.com/objectundefined/ready",
+    "amqplib": "~0.1.0",
+    "when": "~2.5.1",
+    "re": "~0.1.1-2"
+	},
+  "author": "Gabriel Lipson",
+  "license": "BSD",
+  "readmeFilename": "README.md",
+  "gitHead": "58e9fff4be5b4aa2251d1230f353c65297600822",
+  "bugs": {
+    "url": "https://github.com/objectundefined/amq/issues"
+  }
+}
