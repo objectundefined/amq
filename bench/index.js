@@ -58,7 +58,7 @@ when.all(promises).then( runSuite ).then(null,function(err){
 function runSuite () {
 	
 	var request = require('request') ;	
-	var n = 1000 ;
+	var times = 10 ;
 	var tests = [] ;
 	
 	if ( doRpc ) {
@@ -79,7 +79,7 @@ function runSuite () {
 	
 	function httpGet ( allDone ) {
 		
-		runTest( 'http#get' , n , function(done){
+		runTest( 'http#get' , times , function(done){
 			
 			request({ method: 'GET' , uri: httpUrl  }, function (error, response, body) {
 				done(null) ;
@@ -91,7 +91,7 @@ function runSuite () {
 
 	function httpPost ( allDone ) {
 		
-		runTest( 'http#post' , n , function(done){
+		runTest( 'http#post' , times , function(done){
 			
 			var postData = querystring.stringify({ name : 'world' }) ;
 			request({ method: 'POST' , uri: httpUrl , body : postData  }, function (error, response, body) {
@@ -104,7 +104,7 @@ function runSuite () {
 	
 	function rpcNoArgs ( allDone ) {
 		
-		runTest( 'rpc#noArgs' , n , function(done){
+		runTest( 'rpc#noArgs' , times , function(done){
 			
 			rpcClient.call(rpcMethod,[]).then( done , done )
 			
@@ -114,7 +114,7 @@ function runSuite () {
 	
 	function rpcWithArgs ( allDone ) {
 		
-		runTest( 'rpc#args' , n , function(done){
+		runTest( 'rpc#args' , times , function(done){
 			
 			rpcClient.call(rpcMethod,['foo']).then( done , done )
 		},allDone) ;
@@ -125,21 +125,34 @@ function runSuite () {
 
 function runTest ( name , times , fn , done ) {
 	
-	var start = Date.now() ;
-	async.times( times , function (n,cb) {
+	var set = 100 ;
+	var duration = 0 ;
+	var runs = set * times ;
+	
+	async.timesSeries( times , function ( n1 , doneWithIteration ) {
 		
-		fn(cb);
+		var start = Date.now() ;
 		
-	},function(){
+		async.times( set , function ( i , cb ) {
+			
+			fn(cb);
+			
+		},function(){
+			
+			var end = Date.now() ;
+			duration += ( end-start ) ;
+			setTimeout(doneWithIteration,500) ;
+			
+		})
+	
+	} , function (){
 		
-		var end = Date.now() ;
-		var time = end - start ;
-		var hz = times/(time/1000) ;
+		var hz = runs / ( duration/1000 ) ;
 		
 		console.log("%s: %s ops/sec",name,hz) ;
 		
-		setTimeout(done,1000)
+		done() ;
 		
-	})
+	});
 	
 }
