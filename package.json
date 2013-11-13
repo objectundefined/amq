@@ -23,7 +23,17 @@
     "amqplib": "~0.1.0",
     "when": "~2.5.1",
     "re": "~0.1.1-2",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "msgpack": "~0.2.1"
+  },
+  "devDependencies": {
+    "mocha": "~1.14.0",
+    "benchtable": "0.0.2",
+    "request": "~2.27.0",
+    "benchmark": "~1.0.0",
+    "testify-benchmark": "~0.1.0",
+    "microtime": "~0.4.0",
+    "async": "~0.2.9"
   },
   "author": "Gabriel Lipson",
   "license": "BSD",
