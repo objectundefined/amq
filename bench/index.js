@@ -58,12 +58,12 @@ when.all(promises).then( runSuite ).then(null,function(err){
 function runSuite () {
 	
 	var request = require('request') ;	
-	var times = 10 ;
+	var times = 15 ;
 	var tests = [] ;
 	
 	if ( doRpc ) {
-		tests.push( rpcNoArgs ) ;
 		tests.push( rpcWithArgs ) ;
+		tests.push( rpcNoArgs ) ;
 	}
 	
 	if ( doHttp ) {
