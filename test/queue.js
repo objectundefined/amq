@@ -9,68 +9,6 @@ var connection = amq.createConnection({ host : 'localhost' , debug : true },{
 var when = require('when') ;
 var assert = require('assert') ;
 
-/**
- * 
-	ChannelModel#close
-*	ChannelModel#on('close', function() {...})
-*	ChannelModel#on('error', function (err) {...})
-	ChannelModel#createChannel()
-	Channel#close()
-	Channel#on('close', function() {...})
-*	Channel#on('error', function(err) {...})
-*	Channel#on('return', function(msg) {...})
-*	Channel#on('drain', function() {...})
-*	Channel#assertQueue([queue], [options])
-*	Channel#checkQueue(queue)
-*	Channel#deleteQueue(queue)
-*	Channel#purgeQueue(queue)
-*	Channel#bindQueue(queue, source, pattern, [args])
-*	Channel#unbindQueue(queue, source, pattern, [args])
-*	Channel#assertExchange(exchange, type, [options])
-	Channel#checkExchange(exchange)
-	Channel#deleteExchange(name, [options])
-*	Channel#bindExchange(destination, source, pattern, [args])
-*	Channel#unbindExchange(destination, source, pattern, [args])
-*	Channel#publish(exchange, routingKey, content, [options])
-*	Channel#sendToQueue(queue, content, [options])
-*	Channel#consume(queue, callback, [options])
-	Channel#cancel(consumerTag)
-*	Channel#get(queue, [options])
-*	Channel#ack(message, [allUpTo])
-*	Channel#ackAll()
-*	Channel#nack(message, [allUpTo], [requeue])
-*	Channel#nackAll([requeue])
-*	Channel#prefetch(count)
-*	Channel#recover()
- */
-
-describe('exchange', function(){
-	var exchange = connection.exchange( format('test-exg-%s',uuid.v4()) , { type : 'direct' , autoDelete : true }) ;
-  describe('#bind', function(){
-    it('should resolve when calling bind to amq.direct', function(done){
-			exchange.bind('amq.direct').then(function(){
-				done();
-			}).then(null,done)
-    })
-  })
-  describe('#unbind', function(){
-    it('should resolve when calling unbind to amq.direct', function(done){
-			exchange.unbind('amq.direct').then(function(){
-				done();
-			}).then(null,done)
-    })
-  })
-  describe('#bind-error', function(){
-    it('should reject when calling bind to a random string that isnt a valid exchange', function(done){
-			exchange.bind(uuid.v4()).then(function(){
-				done(new Error('Should not have bound to a non-existent exchange.'));
-			}).then(null,function(){
-				done();
-			})
-    })
-  })
-})
-
 describe('queue', function(){
 	var queue = connection.queue( '' , { exclusive : true }) ;
   describe('#bind', function(){
