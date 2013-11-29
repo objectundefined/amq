@@ -116,7 +116,7 @@ describe('queue', function(){
 			var queueName = 'getCheck-'+uuid();
 			var queue = connection.queue( queueName , { exclusive : true }) ;
 			queue.publish('foo').then(function(){
-				queue.get(queueName).then(function(message){
+				queue.get().then(function(message){
 					assert.equal( message.content.toString('utf8'), 'foo' , 'Incorrect Message Received' );
 					queue.ack(message);
 					done();
@@ -133,7 +133,7 @@ describe('queue', function(){
 				// use confirm to know that the message is available
 				queue.check().then(function(d){
 					assert.equal(d.messageCount,1,'Message Count');
-					return queue.get(queueName);
+					return queue.get();
 				}).then(function(message){
 					assert.equal(message.content.toString('utf8') , 'foo' , 'Incorrect Message Received' );
 					return queue.ack(message);
