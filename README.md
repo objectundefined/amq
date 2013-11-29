@@ -13,7 +13,8 @@ var connection = amq.createConnection({ host : 'localhost' , debug : true },{
 	reconnect : { strategy : 'constant' , initial : 1000 } 
 });
 ```
-###Queue
+### Some quick examples 
+
 ```javascript
 	
 	var queue = connection.queue( 'someName' , { durable : true }) ;
