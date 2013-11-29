@@ -15,21 +15,21 @@ describe('exchange', function(){
 	var exchange = connection.exchange( format('test-exg-%s',uuid.v4()) , { type : 'direct' , autoDelete : true }) ;
   describe('#bind', function(){
     it('should resolve when calling bind to amq.direct', function(done){
-			exchange.bind('amq.direct').then(function(){
+			exchange.bind('amq.direct','pattern').then(function(){
 				done();
 			}).then(null,done)
     })
   })
   describe('#unbind', function(){
     it('should resolve when calling unbind to amq.direct', function(done){
-			exchange.unbind('amq.direct').then(function(){
+			exchange.unbind('amq.direct','pattern').then(function(){
 				done();
 			}).then(null,done)
     })
   })
   describe('#bind-error', function(){
     it('should reject when calling bind to a random string that isnt a valid exchange', function(done){
-			exchange.bind(uuid.v4()).then(function(){
+			exchange.bind(uuid.v4(),'pattern').then(function(){
 				done(new Error('Should not have bound to a non-existent exchange.'));
 			}).then(null,function(){
 				done();
