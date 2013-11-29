@@ -14,6 +14,7 @@ var rpcClient ;
 var rpcMethod ;
 var httpUrl = format( 'http://%s:%s', config.http.host , config.http.port )
 
+
 if ( doHttp ) {
 	
 	var httpReady = when.defer() ;
@@ -58,12 +59,12 @@ when.all(promises).then( runSuite ).then(null,function(err){
 function runSuite () {
 	
 	var request = require('request') ;	
-	var times = 15 ;
+	var times = 5 ;
 	var tests = [] ;
 	
 	if ( doRpc ) {
-		tests.push( rpcWithArgs ) ;
 		tests.push( rpcNoArgs ) ;
+		tests.push( rpcWithArgs ) ;
 	}
 	
 	if ( doHttp ) {
@@ -74,8 +75,6 @@ function runSuite () {
 	}
 	
 	async.series(tests,function(){})
-	
-	
 	
 	function httpGet ( allDone ) {
 		
@@ -106,7 +105,7 @@ function runSuite () {
 		
 		runTest( 'rpc#noArgs' , times , function(done){
 			
-			rpcClient.call(rpcMethod,[]).then( done , done )
+			rpcClient.call(rpcMethod,null).then( done , done )
 			
 		},allDone) ;
 		
@@ -116,7 +115,8 @@ function runSuite () {
 		
 		runTest( 'rpc#args' , times , function(done){
 			
-			rpcClient.call(rpcMethod,['foo']).then( done , done )
+			rpcClient.call(rpcMethod,'foo').then( done , done )
+			
 		},allDone) ;
 		
 	}
@@ -125,7 +125,7 @@ function runSuite () {
 
 function runTest ( name , times , fn , done ) {
 	
-	var set = 100 ;
+	var set = 500 ;
 	var duration = 0 ;
 	var runs = set * times ;
 	
@@ -134,14 +134,14 @@ function runTest ( name , times , fn , done ) {
 		var start = Date.now() ;
 		
 		async.times( set , function ( i , cb ) {
-			
-			fn(cb);
-			
+			setImmediate(function(){
+				fn(cb);				
+			})
 		},function(){
 			
 			var end = Date.now() ;
 			duration += ( end-start ) ;
-			setTimeout(doneWithIteration,500) ;
+			setTimeout(doneWithIteration,1000) ;
 			
 		})
 	

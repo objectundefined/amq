@@ -1,12 +1,13 @@
 var amq = require('../index') ;
 var config = require('./config') ;
 var opts = config.rpc ;
-var rpc = amq.createConnection(opts.connection).rpc(opts.exchange)
+var conn = amq.createConnection(opts.connection) ;
+var rpc = conn.rpc(opts.exchange)
 var format = require('util').format ;
 
-rpc.expose(opts.method,function(d){
+rpc.expose(opts.method,function(d,resolve,reject,notify){
 	
-	this.deferred.resolve( 'Hello ' + (d||'World') )
+	resolve( 'Hello ' + (d||'World') )
 
 }).then(function(){
 
