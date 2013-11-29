@@ -23,6 +23,19 @@ describe('rpc', function(){
 			}).then(null,done);
     })
   })
+  describe('#expose-str/resolve/awaitReply=false', function(){
+    it('should create a queue, resolve messages', function(done){
+			rpc.expose( 'rpc.foobar' , function(args,resolve,reject){
+				resolve('foo');
+			}).then(function(consumer){
+				rpc.call( 'rpc.foobar' , null , { awaitReply : false } ).then(function(res){
+					/*published returns true only when expectReply==false*/
+					assert(res!=='foo'&&res==true,'RPC result should be \'true\' because awaitReply is false')
+					done();
+				}).then(null,done)
+			}).then(null,done);
+    })
+  })
   describe('#expose-q/reject', function(){
     var queueName = 'rpcCheck-'+uuid();
 		var q = connection.queue(queueName,{autoDelete:true});
