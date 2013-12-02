@@ -13,7 +13,7 @@ describe('rpc', function(){
 	var rpc = connection.rpc() ;
   describe('#expose-str/resolve', function(){
     it('should create a queue, resolve messages', function(done){
-			rpc.expose( 'rpc.foobar' , function(args,resolve,reject){
+			rpc.expose( 'rpc.foobar' , function(data,resolve,reject){
 				resolve('foo');
 			}).then(function(consumer){
 				rpc.call( 'rpc.foobar' , null ).then(function(res){
@@ -25,7 +25,7 @@ describe('rpc', function(){
   })
   describe('#expose-str/resolve/awaitReply=false', function(){
     it('should create a queue, resolve messages', function(done){
-			rpc.expose( 'rpc.foobar' , function(args,resolve,reject){
+			rpc.expose( 'rpc.foobar' , function(data,resolve,reject){
 				resolve('foo');
 			}).then(function(consumer){
 				rpc.call( 'rpc.foobar' , null , { awaitReply : false } ).then(function(res){
@@ -40,7 +40,7 @@ describe('rpc', function(){
     var queueName = 'rpcCheck-'+uuid();
 		var q = connection.queue(queueName,{autoDelete:true});
 		it('should create a queue, resolve messages', function(done){
-			rpc.expose( q , function(args,resolve,reject){
+			rpc.expose( q , function(data,resolve,reject){
 				reject('bar');
 			}).then(function(consumer){
 				rpc.call( q.name , null ).then(function(res){
@@ -56,7 +56,7 @@ describe('rpc', function(){
     var queueName = 'rpcCheck-'+uuid();
 		var q = connection.queue(queueName,{autoDelete:true});
 		it('should create a queue, notify twice, then resolve', function(done){
-			rpc.expose( q , function(args,resolve,reject,notify){
+			rpc.expose( q , function(data,resolve,reject,notify){
 				setTimeout(function(){
 					notify(1);
 				},5);
