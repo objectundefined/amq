@@ -13,8 +13,8 @@ describe('rpc', function(){
 	var rpc = connection.rpc() ;
   describe('#expose-str/resolve', function(){
     it('should create a queue, resolve messages', function(done){
-			rpc.expose( 'rpc.foobar' , function(data,resolve,reject){
-				resolve('foo');
+			rpc.expose( 'rpc.foobar' , function(data){
+				return when('foo')
 			}).then(function(consumer){
 				rpc.call( 'rpc.foobar' , null ).then(function(res){
 					assert(res=='foo','RPC result is not \'foo\'')
@@ -25,8 +25,8 @@ describe('rpc', function(){
   })
   describe('#expose-str/resolve/awaitReply=false', function(){
     it('should create a queue, resolve messages', function(done){
-			rpc.expose( 'rpc.foobar' , function(data,resolve,reject){
-				resolve('foo');
+			rpc.expose( 'rpc.foobar' , function(data){
+				return when('foo')
 			}).then(function(consumer){
 				rpc.call( 'rpc.foobar' , null , { awaitReply : false } ).then(function(res){
 					/*published returns true only when expectReply==false*/
@@ -40,8 +40,10 @@ describe('rpc', function(){
     var queueName = 'rpcCheck-'+uuid();
 		var q = connection.queue(queueName,{autoDelete:true});
 		it('should create a queue, resolve messages', function(done){
-			rpc.expose( q , function(data,resolve,reject){
-				reject('bar');
+			rpc.expose( q , function(data){
+				return when.promise(function(resolve,reject){
+					reject('bar')
+				})
 			}).then(function(consumer){
 				rpc.call( q.name , null ).then(function(res){
 					done(new Error('Should Not Resolve'));
@@ -56,16 +58,18 @@ describe('rpc', function(){
     var queueName = 'rpcCheck-'+uuid();
 		var q = connection.queue(queueName,{autoDelete:true});
 		it('should create a queue, notify twice, then resolve', function(done){
-			rpc.expose( q , function(data,resolve,reject,notify){
-				setTimeout(function(){
-					notify(1);
-				},5);
-				setTimeout(function(){
-					notify(2);
-				},10);
-				setTimeout(function(){
-					resolve(3);
-				},15);
+			rpc.expose( q , function(data){
+				return when.promise(function(resolve,reject,notify){
+					setTimeout(function(){
+						notify(1);
+					},5);
+					setTimeout(function(){
+						notify(2);
+					},10);
+					setTimeout(function(){
+						resolve(3);
+					},15);
+				})
 			}).then(function(consumer){
 				var notifyResults = [];
 				rpc.call( q.name , null ).then(function(res){

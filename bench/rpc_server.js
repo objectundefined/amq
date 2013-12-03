@@ -4,10 +4,13 @@ var opts = config.rpc ;
 var conn = amq.createConnection(opts.connection) ;
 var rpc = conn.rpc(opts.exchange)
 var format = require('util').format ;
+var when = require('when');
 
-rpc.expose(opts.method,function(d,resolve,reject,notify){
+rpc.expose(opts.method,function(d){
 	
-	resolve( 'Hello ' + (d||'World') )
+	return when.promise(function(resolve,reject,notify){
+		resolve( 'Hello ' + (d||'World') )		
+	})
 
 }).then(function(){
 
