@@ -161,6 +161,7 @@ describe('queue', function(){
 			var queue = connection.queue( '' , { exclusive : true }) ;
 			queue.destroy().then(function(){
 				return queue.destroy().then(function(){
+					console.log('\nHERE',arguments)
 					return done(new Error('Should not have destroyed a second time'))
 				}).then(null,function(e){ 
 					done();
